@@ -1,0 +1,5 @@
+-e ../mosaik
+-e ../mosaik-api-python
+-e ../mosaik-csv
+-e ../mosaik-hdf5
+-e ../mosaik-pypower

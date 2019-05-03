@@ -1,0 +1,153 @@
+text {
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+}
+
+#progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 3px;
+    background-color: hsl(197, 90%, 50%);
+    z-index: 100;
+}
+
+#canvas {
+    width:  100%;
+    height: 100%;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* Topology items */
+.node {
+    stroke: #777;
+    stroke-width: 5px;
+    fill: #ddd;
+}
+.gen {
+  stroke-width: 3px !important;
+}
+.pqbus {
+    stroke: rgb(204, 178, 83);
+}
+.refbus {
+    stroke: #f00;
+}
+.load {
+    stroke: rgb(54, 102, 121);
+}
+.gen {
+    stroke: rgb(103, 162, 73);
+}
+.cc {
+    stroke: rgb(64, 64, 64);
+}
+.storage {
+    stroke: hsl(288, 50%, 48%);
+}
+.special {
+    stroke: hsl(32, 50%, 36%);
+}
+.highlight {
+    stroke: hsl(0, 0%, 0%);
+}
+
+.link {
+    stroke: #777;
+    stroke-width: 2px;
+}
+
+/* Timeline items */
+.axis path, .axis line {
+    fill: none;
+    stroke: #333;
+    shape-rendering: crispEdges;
+}
+
+.line {
+    fill: none;
+    stroke: #333;
+    stroke-width: 2px;
+}
+
+.label {
+    font-weight: 400;
+}
+
+body {
+    font-size: 14px;
+    background: #f9fafb;
+    letter-spacing: .2px;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,.0625) !important;
+    display: block;
+    height: 80px;
+    margin-bottom: 0;
+    padding: 0;
+    position: fixed;
+    -webkit-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease;
+    width: 100%;
+    z-index: 800;
+    color: #4c4c4c;
+}
+
+.navbar, .navbar>.container, .navbar>.container-fluid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.box {
+  background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,.0625)!important;
+  padding: 20px!important;
+  margin: 10px!important;
+}
+
+.main-container {
+  margin: 50px;
+}
+
+.box-title {
+    margin-bottom: 10px!important;
+    width: 100%!important;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.t {
+  line-height: 1!important;
+  letter-spacing: .5px;
+  margin-top: 0!important;
+  margin-bottom: 20px!important;
+  display: inline-block;
+}
+
+p {
+  display: inline-block;
+}

@@ -1,0 +1,107 @@
+.color-1 {
+  background-color: #8e8e93 !important;
+}
+.color-2 {
+  background-color: #34aadc !important;
+}
+.color-3 {
+  background-color: #ff3b30 !important;
+}
+.color-4 {
+  background-color: #ff9500 !important;
+}
+.color-5 {
+  background-color: #5856d6 !important;
+}
+.color-6 {
+  background-color: #5ac8fa !important;
+}
+
+.progress-pie-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #E5E5E5;
+  position: relative;
+}
+.progress-pie-chart.gt-50 {
+  background-color: #81CE97;
+}
+
+.ppc-progress {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: calc(50% - 50px);
+  top: calc(50% - 50px);
+  width: 100px;
+  height: 100px;
+  clip: rect(0, 100px, 100px, 50px);
+}
+.ppc-progress .ppc-progress-fill {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: calc(50% - 50px);
+  top: calc(50% - 50px);
+  width: 100px;
+  height: 100px;
+  clip: rect(0, 50px, 100px, 0);
+  background: #81CE97;
+  transform: rotate(60deg);
+}
+.gt-50 .ppc-progress {
+  clip: rect(0, 50px, 100px, 0);
+}
+.gt-50 .ppc-progress .ppc-progress-fill {
+  clip: rect(0, 100px, 100px, 50px);
+  background: #E5E5E5;
+}
+
+.ppc-percents {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: calc(50% - 86.9565217391px/2);
+  top: calc(50% - 86.9565217391px/2);
+  width: 86.9565217391px;
+  height: 86.9565217391px;
+  background: #fff;
+  text-align: center;
+  display: table;
+}
+.ppc-percents span {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.pcc-percents-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+body {
+  font-family: Arial;
+  background: #f7f7f7;
+}
+
+.progress-pie-chart {
+  margin: 10px auto 0;
+}
+
+.center {
+  text-align: center;
+}
+
+.table {
+  border: 1px solid #ddd;
+  table-layout: fixed;
+}
+
+.house {
+  height: 300px;
+  display: inline-block;
+  float: none;
+}
