@@ -26,6 +26,8 @@ class DATA():
         self.n3 = []
         self.n4 = []
         self.n5 = []
+        self.n6 = []
+        self.n7 = []
         return
 
 GRAPH_NUMBER = int(args.type)
@@ -34,15 +36,15 @@ GRAPHS = {
         "name": "n2",
         "bigtitle": 'Number of quantum exchanges detected as having undergone a man-in-the-middle',
         "x": 'Number of Qubit exchanged per second',
-        "y": 'Number of MITM in 10 minutes of simulation',
+        "y": 'Detected MITM rate',
         "title": 'Simulation of 37 houses for 30 minutes',
         "ymax": 160
     },
     1: {
         "name": "n4",
-        "bigtitle": 'Number of qubits exchanges for a simulation of 30 minutes',
-        "x": 'Number of Qubit per second',
-        "y": 'Number of Qubits in 30 minutes',
+        "bigtitle": 'Validated qubit rate',
+        "x": 'Number of Qubit exchanged per second',
+        "y": 'Validated qubit rate',
         "title": 'Simulation of 37 houses for 30 minutes',
         "ymax": 6000
     },
@@ -70,6 +72,22 @@ GRAPHS = {
         "title": 'Simulation of 37 houses for 30 minutes',
         "ymax": 250
     },
+    5: {
+        "name": "n6",
+        "bigtitle": 'Number of qubits exchanged',
+        "x": 'Number of Qubit exchanged per second',
+        "y": 'Number of dropped exchanged to share a secret',
+        "title": 'Simulation of 37 houses for 30 minutes',
+        "ymax": 250
+    },
+    6: {
+        "name": "n7",
+        "bigtitle": 'Number of qubits exchanged',
+        "x": 'Number of Qubit exchanged per second',
+        "y": 'Latency (s)',
+        "title": 'Simulation of 37 houses for 30 minutes',
+        "ymax": 250
+    },
 }
 data = {}
 simulation = {}
@@ -89,6 +107,8 @@ with open('./output/'+args.filename) as f:
         data[key].n3.append(d[key]["n3"])
         data[key].n4.append(d[key]["n4"])
         data[key].n5.append(d[key]["n5"])
+        data[key].n6.append(d[key]["n6"])
+        data[key].n7.append(d[key]["n7"])
 
 list = {}
 list2 = {}
@@ -144,10 +164,9 @@ if args.lines is True:
         # Create a figure instance
         if args.overlap is False:
             fig = plt.figure(str(key), figsize=(10, 10))
-        plt.suptitle(GRAPHS[GRAPH_NUMBER]["bigtitle"], fontsize=14, fontweight='bold')
+        #plt.suptitle(GRAPHS[GRAPH_NUMBER]["bigtitle"], fontsize=20, fontweight='bold')
         plt.xlabel(GRAPHS[GRAPH_NUMBER]["x"], fontsize=20)
         plt.ylabel(GRAPHS[GRAPH_NUMBER]["y"], fontsize=20)
-        #plt.title(GRAPHS[GRAPH_NUMBER]["title"])
         plt.xlim([5,5+len(value)])
         if args.overlap is False:
             plt.ylim([0,GRAPHS[GRAPH_NUMBER]["ymax"]])

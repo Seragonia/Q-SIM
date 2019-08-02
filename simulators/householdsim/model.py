@@ -79,6 +79,7 @@ class HouseModel:
                 'protocol': p,
                 'commLayer': comLayer(p, p.__get_states_mapping__()),
                 'hhrequest': None,
+                'next_send': 0,
             })
 
         # Helpers for step()
@@ -142,10 +143,11 @@ class HouseModel:
         if power_consumption != None:
             self.consumption += power_consumption
         #Send every `dr_freq` data demand
-        if time % self.dr_freq == 0 and self.consumption != 0:
-            house['commLayer'].__add_message_to_be_send__(str(self.consumption))
+        if time >= house['next_send'] and self.consumption != 0:
+            house['commLayer'].__add_message_to_be_send__(str(round(self.consumption,3)))
             self.consumption = 0
             self._wait = False
+            house['next_send'] += self.dr_freq
         out = house['commLayer'].__doStep__(data)
         return out
 

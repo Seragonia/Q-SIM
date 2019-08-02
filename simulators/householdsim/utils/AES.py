@@ -41,11 +41,14 @@ class Protocol():
             "n2": 0,
             "n3": 0,
             "n4": 0,
-            "n5": 0
+            "n5": 0,
+            'n6': 3600, #Min latency Time (second) per round of message sending
+            'n7': 0, #Max latency Time (second) per round of message sending
         }
         self.eve = eve
         self.eveP = eveP
         self.BLOCK_SIZE = 64
+        self.elapsed_time = 0
         return
 
     def __get_states_mapping__(self):
@@ -76,6 +79,8 @@ class Protocol():
         self.outputs["n4"] += self.N
         self.outputs["n5"] += (self.N - len(self.protocol.key))
         self.outputs["n2"] += error
+        self.outputs["n6"] = min(self.elapsed_time, self.outputs["n6"])
+        self.outputs["n7"] = max(self.elapsed_time, self.outputs["n7"])
         return
     def __update_undetected_error__(self, message):
         '''
@@ -145,6 +150,8 @@ class Protocol():
         If data is None, AES will start as the sender of the secret.
         Return next step to do
         """
+        self.outputs["n6"] = 3600
+        self.outputs["n7"] = 0
         if len(self.sD) != 0:
             return self.__start_sender__(data)
         else:
@@ -158,6 +165,7 @@ class Protocol():
         """
         @data : encapsulated message with QKD request.
         """
+        self.elapsed_time += 1
         self.isSender = False
         self.state = 0
         self.rD.append({"msg": '', "length": data['aesl']})
@@ -178,6 +186,7 @@ class Protocol():
         | Length N of the message |  First round of QKD |
         +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         """
+        self.elapsed_time += 1
         self.isSender = True
         self.state = 0
 
@@ -188,6 +197,7 @@ class Protocol():
             return {"aesl": len(self.sD[0]['msg']), "qkd": qkd}, 22 #__qkd_loop__
 
     def __secret_gen__(self, data):
+        self.elapsed_time += 1
         if self.state == 3:
             self.secret.extend(self.protocol.key)
             self.__update_outputs__()
@@ -212,6 +222,7 @@ class Protocol():
         """
         Do QKD until the shared secret stack is large enough to perform AES
         """
+        self.elapsed_time += 1
         if self.state == 3:
             self.secret.extend(self.protocol.key)
             self.__update_outputs__()
@@ -232,6 +243,7 @@ class Protocol():
         """
         Use the shared secret to perform AES over the message to be sent
         """
+        self.elapsed_time += 1
         msg = self.sD.pop(0)
         aes = self.__Encryption__(msg['msg'], self.secret)
         #We need to delete the part of the shared secret stack used
@@ -241,6 +253,7 @@ class Protocol():
         return {"aesl": len(msg['msg']), "aes": aes, "control": -2}, 3
 
     def __receive_message__(self, data):
+        self.elapsed_time += 1
         #If dara is None, wait until data is received
         if data is None:
             return None, 13
@@ -259,6 +272,7 @@ class Protocol():
         return -1, 3 #Message received.
 
     def __done__(self, data):
+        self.elapsed_time = 0
         if data and 'response' in data or data and 'aesl' in data: #restart as a receiver
             return self.__start_receiver__(self.__get_message_or_response__(data))
         elif len(self.sD) >0: #restart as sender

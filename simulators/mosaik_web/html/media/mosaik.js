@@ -42,7 +42,13 @@ var timeline = Timeline();
 var svg = d3.select('#canvas').attr('width', width).attr('height', height);
 var ws = make_websocket();
 
-
+//
+// Others
+//
+var correspondance = {
+  'PQBus': 'Service drop',
+  'RefBus': 'Distribution Feeder'
+}
 //
 // Functions
 //
@@ -324,7 +330,9 @@ function Topology(conf) {
         li.append('text')
             .attr('x', node_r * 3.5)
             .attr('y', node_r)
-            .text(function(d) { return d.key; });
+            .text(function(d) {
+              return correspondance[d.key] != null ? correspondance[d.key] : d.key;
+            });
     }
 
     /**

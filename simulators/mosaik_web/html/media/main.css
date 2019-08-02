@@ -26,27 +26,27 @@ text {
 
 /* Topology items */
 .node {
-    stroke: #777;
-    stroke-width: 5px;
+    stroke: #366679;
+    stroke-width: 6px;
     fill: #ddd;
 }
 .gen {
   stroke-width: 3px !important;
 }
 .pqbus {
-    stroke: rgb(204, 178, 83);
+  stroke: #ccb255;
 }
 .refbus {
-    stroke: #f00;
+    stroke: #ff0101;
 }
 .load {
     stroke: rgb(54, 102, 121);
 }
 .gen {
-    stroke: rgb(103, 162, 73);
+    stroke: #64a648;
 }
 .cc {
-    stroke: rgb(64, 64, 64);
+  stroke: #404040;
 }
 .storage {
     stroke: hsl(288, 50%, 48%);

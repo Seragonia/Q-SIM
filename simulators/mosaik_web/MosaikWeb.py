@@ -172,7 +172,7 @@ class MosaikWeb(mosaik_api.Simulator):
             })
 
         for source, target in nxg.edges():
-            if not 'CC' in target:
+            if 'CC' not in target:
                 topology['links'].append({
                     'source': node_idx[source],
                     'target': node_idx[target],

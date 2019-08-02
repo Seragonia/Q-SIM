@@ -1,8 +1,8 @@
 import sys
 import importlib
 
-INFO = False
-DEBUG = False
+INFO = True
+DEBUG = True
 
 class Protocol():
     """This class is used to run OTP. It uses a given QKD protocol to
@@ -37,10 +37,13 @@ class Protocol():
             "n2": 0,
             "n3": 0,
             "n4": 0,
-            "n5": 0
+            "n5": 0,
+            'n6': 3600, #Min latency Time (second) per round of message sending
+            'n7': 0, #Max latency Time (second) per round of message sending
         }
         self.eve = eve
         self.eveP = eveP
+        self.elapsed_time = 0
         return
 
     def __get_states_mapping__(self):
@@ -71,6 +74,8 @@ class Protocol():
         self.outputs["n4"] += self.N
         self.outputs["n5"] += (self.N - len(self.protocol.key))
         self.outputs["n2"] += error
+        self.outputs["n6"] = min(self.elapsed_time, self.outputs["n6"])
+        self.outputs["n7"] = max(self.elapsed_time, self.outputs["n7"])
         return
     def __update_undetected_error__(self, message):
         '''
@@ -124,6 +129,8 @@ class Protocol():
         If data is None, OTP will start as the sender of the secret.
         Return next step to do
         """
+        self.outputs["n6"] = 3600
+        self.outputs["n7"] = 0
         if len(self.sD) != 0:
             return self.__start_sender__(data)
         else:
@@ -139,6 +146,7 @@ class Protocol():
         """
         self.isSender = False
         self.state = 0
+        self.elapsed_time += 1
         self.rD.append({"msg": '', "length": data['otpl']})
         if len(self.secret) >= data['otpl']*8:
             return self.__receive_message__(data)
@@ -159,7 +167,7 @@ class Protocol():
         """
         self.isSender = True
         self.state = 0
-
+        self.elapsed_time += 1
         if len(self.secret) >= len(self.sD[0]['msg'])*8:
             return self.__send_message__(None) #Send message directly
         else:
@@ -167,6 +175,7 @@ class Protocol():
             return {"otpl": len(self.sD[0]['msg']), "qkd": qkd}, 22 #__qkd_loop__
 
     def __secret_gen__(self, data):
+        self.elapsed_time += 1
         if self.state == 3:
             self.secret.extend(self.protocol.key)
             self.__update_outputs__()
@@ -191,6 +200,7 @@ class Protocol():
         """
         Do QKD until the shared secret stack is large enough to perform OTP
         """
+        self.elapsed_time += 1
         if self.state == 3:
             self.secret.extend(self.protocol.key)
             self.__update_outputs__()
@@ -212,6 +222,7 @@ class Protocol():
         Use the shared secret to perform OTP over the message to be sent
         First convert the message into binary format, then xor it using the secret
         """
+        self.elapsed_time += 1
         msg = self.sD.pop(0)
         bits = self.__str_to_bits__(msg['msg'])
         otp = self.__Encryption__(bits, self.secret)
@@ -222,6 +233,7 @@ class Protocol():
         return {"otpl": len(otp)/8, "otp": otp, "control": -2}, 3
 
     def __receive_message__(self, data):
+        self.elapsed_time += 1
         #If data is None, wait until data is received
         if data is None:
             return None, 13
@@ -240,6 +252,7 @@ class Protocol():
         return -1, 3 #Message received.
 
     def __done__(self, data):
+        self.elapsed_time = 0
         if data and 'response' in data or data and 'otpl' in data: #restart as a receiver
             return self.__start_receiver__(self.__get_message_or_response__(data))
         elif len(self.sD) >0: #restart as sender

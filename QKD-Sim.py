@@ -2,7 +2,7 @@ import random
 import datetime
 from mosaik.util import connect_randomly, connect_many_to_one
 import mosaik
-
+from argparse import ArgumentParser
 
 sim_config = {
     'CSV': {
@@ -185,6 +185,49 @@ def connect_buildings_to_grid(world, houses, grid):
         node_id = house_data[house]['node_id']
         world.connect(house, buses[node_id], ('P_out', 'P'))
 
+parser = ArgumentParser()
+parser.add_argument("-o", "--output",action='store_true')
+parser.add_argument("-t", "--time",  dest="time",
+                    help="Duration of the simulation")
+parser.add_argument("-n", "--nqubit",  dest="nqubit", type=int,
+                    help="Number of qubit exchanged per second.")
+parser.add_argument("-p", "--protocol",  dest="protocol", type=int,
+                    help='1: {"qkd": "BB84", "crypto": "OTP"},   #OPT cryptosystem using BB84 protocol\
+                                       2: {"qkd": "BB84", "crypto": "AES"},   #AES cryptosystem using BB84 protocol\
+                                       3: {"qkd": "SARG04", "crypto": "OTP"}, #OPT cryptosystem using SARG04 protocol\
+                                       4: {"qkd": "SARG04", "crypto": "AES"}, #AES cryptosystem using SARG04 protocol\
+                                       5: {"qkd": "KMB09", "crypto": "OTP"},  #OTP cryptosystem using KMB09 protocol\
+                                       6: {"qkd": "KMB09", "crypto": "AES"}}  #AES cryptosystem using KMB09 protocol')
+args = parser.parse_args()
 
+if args.protocol is not None:
+    PROTOCOL_USED = args.protocol
+if args.nqubit is not None and args.nqubit > 2:
+    NQUBIT = args.nqubit
+
+parser = ArgumentParser()
+parser.add_argument("-o", "--output", dest="output", action='store_true')
+parser.add_argument("-t", "--time",  dest="time", type=int,
+                    help="Duration of the simulation (in hours)")
+parser.add_argument("-n", "--nqubit",  dest="nqubit", type=int,
+                    help="Number of qubit exchanged per second.")
+parser.add_argument("-p", "--protocol",  dest="protocol", type=int,
+                    help='1: {"qkd": "BB84", "crypto": "OTP"},   #OPT cryptosystem using BB84 protocol\
+                                       2: {"qkd": "BB84", "crypto": "AES"},   #AES cryptosystem using BB84 protocol\
+                                       3: {"qkd": "SARG04", "crypto": "OTP"}, #OPT cryptosystem using SARG04 protocol\
+                                       4: {"qkd": "SARG04", "crypto": "AES"}, #AES cryptosystem using SARG04 protocol\
+                                       5: {"qkd": "KMB09", "crypto": "OTP"},  #OTP cryptosystem using KMB09 protocol\
+                                       6: {"qkd": "KMB09", "crypto": "AES"}}  #AES cryptosystem using KMB09 protocol')
+args = parser.parse_args()
+
+if args.protocol is not None:
+    PROTOCOL_USED = args.protocol
+if args.nqubit is not None and args.nqubit > 2:
+    NQUBIT = args.nqubit
+if args.output is True:
+    SIMULATION_OUTPUT = True
+if args.time is not None and args.time > 0:
+    END = args.time * 3600
+print(args)
 if __name__ == '__main__':
     main()
